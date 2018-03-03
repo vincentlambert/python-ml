@@ -1,3 +1,6 @@
+#
+# Perceptron
+#
 from random import uniform
 
 LEARNING_RATE = 0.001

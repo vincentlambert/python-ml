@@ -1,3 +1,6 @@
+#
+# Perceptron User Interface
+#
 from tkinter import *
 from perceptron import *
 
