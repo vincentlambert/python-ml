@@ -20,3 +20,7 @@ Press __q__ to quit the perceptron
 __WORK IN PROGRESS__
 
 > python src/perceptron/perceptron_tf.py
+
+## Genetic Algorithm
+
+> python src/genetic_algorithm.py

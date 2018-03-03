@@ -1,1 +1,2 @@
 tensorflow==1.6.0
+matplotlib==2.1.2
