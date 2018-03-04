@@ -20,7 +20,7 @@ class NeuralNetwork:
         return 'NeuralNetwork[%s, %s, %s] :\n  Hidden : \n%s\n  Ouput : \n%s' % (self.input_nodes, self.hidden_nodes, self.output_nodes, self.weights_ih, self.weights_ho)
     
     # TODO: Change name to predict()
-    def feed_forward(self, input_data):
+    def predict(self, input_data):
         ''' Feed forward function '''
         inputs = np.matrix(input_data).transpose()
 
@@ -44,7 +44,7 @@ class NeuralNetwork:
 
     def train(self, input_data, target_data):
         ''' Train function  (feed forward and back propagation)'''
-        # outputs = self.feed_forward(inputs)
+        # outputs = self.predict(inputs)
         # # Output layer error
         # errors_o = targets - outputs
         # print(errors_o)
@@ -118,10 +118,10 @@ class NeuralNetwork:
 
 
 def testNN(nn):
-    print(nn.feed_forward([1, 0]))
-    print(nn.feed_forward([0, 1]))
-    print(nn.feed_forward([1, 1]))
-    print(nn.feed_forward([0, 0]))
+    print(nn.predict([1, 0]))
+    print(nn.predict([0, 1]))
+    print(nn.predict([1, 1]))
+    print(nn.predict([0, 0]))
 
 def trainNN(nn, iterations):
     data = [
@@ -147,22 +147,69 @@ def trainNN(nn, iterations):
         x = random.choice(data)
         nn.train(x['inputs'], x['target'])
 
+#
+# Draw heatmap
+#
+import matplotlib.pyplot as plt
 
+# def draw_heatmap(neural_network):
+#     step = 10
+#     data = []
+#     for x1 in range(0, step + 1):
+#         data.append([])
+#         for x2 in range(0, step + 1):
+#             data[x1].append(neural_network.predict([x1 / step, x2 / step]).item())
+
+#     plt.show()
+
+def draw_heatmap(neural_network):
+    step = 10
+    data = []
+    labels = []
+
+    for i in range(0, step + 1):
+        labels.append(i / step)
+
+    for x1 in range(0, step + 1):
+        data.append([])
+        for x2 in range(0, step + 1):
+            data[x1].append(neural_network.predict([x1 / step, x2 / step]).item())
+
+    # Mode 1
+    # fig, axis = plt.subplots()
+    # heatmap = axis.pcolor(data, cmap=plt.cm.Greys)
+    # axis.set_title('Network response')
+    # print(repr(fig))
+    # print(repr(axis))
+
+    # Mode 2
+    x, y = np.meshgrid(labels, labels)
+    intensity = np.array(data)
+    plt.pcolormesh(x, y, intensity, cmap=plt.cm.YlOrRd)
+    plt.colorbar()
+
+    plt.show()
+#
+# Main
+#
 if __name__ == '__main__':
     print("*****")
     print("***** Main...")
     print("*****")
+
+    # Basic tests
     # nn = NeuralNetwork(2, 2, 2)
     # inputs = np.array([1, 0])
     # targets = np.array([1, 1])
     # nn.train(inputs, targets)
 
-    nn = NeuralNetwork(2, 4, 1)
-
+    # Neural network training for XOR
+    nn = NeuralNetwork(2, 3, 1)
     print('***** Before training')
     testNN(nn)
-
-    trainNN(nn, 200000)
-
+    trainNN(nn, 100000)
     print('***** After training')
     testNN(nn)
+
+    # Plot heatmap
+    draw_heatmap(nn)
