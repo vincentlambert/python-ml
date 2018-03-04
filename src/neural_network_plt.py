@@ -41,11 +41,11 @@ if __name__ == '__main__':
 
     # Neural network training for XOR
     nn = NeuralNetwork(2, 3, 1)
-    # print('***** Before training')
-    # testNN(nn)
-    # trainNN(nn, 100000)
-    # print('***** After training')
-    # testNN(nn)
+    print('***** Before training')
+    testNN(nn)
+    trainNN(nn, 100000)
+    print('***** After training')
+    testNN(nn)
 
     # Plot heatmap
     draw_heatmap(nn)
