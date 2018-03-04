@@ -19,7 +19,6 @@ class NeuralNetwork:
     def __str__(self):
         return 'NeuralNetwork[%s, %s, %s] :\n  Hidden : \n%s\n  Ouput : \n%s' % (self.input_nodes, self.hidden_nodes, self.output_nodes, self.weights_ih, self.weights_ho)
     
-    # TODO: Change name to predict()
     def predict(self, input_data):
         ''' Feed forward function '''
         inputs = np.matrix(input_data).transpose()
