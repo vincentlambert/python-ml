@@ -151,16 +151,6 @@ def trainNN(nn, iterations):
 #
 import matplotlib.pyplot as plt
 
-# def draw_heatmap(neural_network):
-#     step = 10
-#     data = []
-#     for x1 in range(0, step + 1):
-#         data.append([])
-#         for x2 in range(0, step + 1):
-#             data[x1].append(neural_network.predict([x1 / step, x2 / step]).item())
-
-#     plt.show()
-
 def draw_heatmap(neural_network):
     step = 10
     data = []
@@ -188,6 +178,7 @@ def draw_heatmap(neural_network):
     plt.colorbar()
 
     plt.show()
+
 #
 # Main
 #
