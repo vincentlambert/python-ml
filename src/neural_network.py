@@ -10,10 +10,10 @@ class NeuralNetwork:
         self.input_nodes = input_nodes
         self.hidden_nodes = hidden_nodes
         self.output_nodes = output_nodes
-        self.weights_ih = np.matrix(np.random.random((self.hidden_nodes, self.input_nodes)))
-        self.weights_ho = np.matrix(np.random.random((self.output_nodes, self.hidden_nodes)))
-        self.bias_h = np.matrix(np.random.random((self.hidden_nodes, 1)))
-        self.bias_o = np.matrix(np.random.random((self.output_nodes, 1)))
+        self.weights_ih = np.matrix(np.random.random((self.hidden_nodes, self.input_nodes))) / self.input_nodes
+        self.weights_ho = np.matrix(np.random.random((self.output_nodes, self.hidden_nodes))) / self.hidden_nodes
+        self.bias_h = np.matrix(np.random.random((self.hidden_nodes, 1))) / self.input_nodes
+        self.bias_o = np.matrix(np.random.random((self.output_nodes, 1))) / self.hidden_nodes
         self.learning_rate = 0.1
 
     def __str__(self):
@@ -25,6 +25,7 @@ class NeuralNetwork:
 
         # Generating hidden layer values
         # hidden = np.dot(self.weights_ih, inputs.reshape(inputs.size, 1))
+
         hidden = self.weights_ih * inputs
         # hidden = np.add(hidden, self.bias_h)
         hidden = hidden + self.bias_h
