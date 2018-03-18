@@ -24,15 +24,15 @@ __WORK IN PROGRESS__
 ## Neural Network
 
 Running the neural network base configuration with XOR classification.
-> python src/neural_network.py
+> python src/neural_network/neural_network.py
 
 
 Running the neural network with XOR classification with render system made with Matplotlib and Tk.
-> python src/neural_network_plt.py
-> python src/neural_network_tk.py
+> python src/neural_network/neural_network_plt.py
+> python src/neural_network/neural_network_tk.py
 
 Running the neural network doodle classifier using Google Quickdraw dataset.
-> python src/neural_network_doodle_classifier.py
+> python src/neural_network/neural_network_doodle_classifier.py
 
 _https://quickdraw.withgoogle.com/_<br>
 _https://github.com/googlecreativelab/quickdraw-dataset_<br>
