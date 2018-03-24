@@ -70,7 +70,7 @@ class FlappyBirdApp(Canvas):
             if pipe.hits(self.bird):
                 print('HIT')
                 self.bird.hit()
-                # self.stop()
+                self.stop()
                 print('Your score : %s' % self.frame_count)
 
         self.bird.update()

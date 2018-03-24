@@ -10,7 +10,8 @@ class Pipe:
         self.x = self.canvas.width
         self.width = 40
         self.height = random.randint(100, 200)
-        self.center = random.randint(25 + int(self.height / 2), self.canvas.height - 25 - int(self.height / 2))
+        self.center = random.randint(25 + int(self.height / 2),
+                                     self.canvas.height - 25 - int(self.height / 2))
         self.velocity = 1
         self.fill_color = '#0000FF'
         self.gx_proxy_top = canvas.create_rectangle(self.x,
