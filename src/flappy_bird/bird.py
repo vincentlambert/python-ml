@@ -1,6 +1,7 @@
 # pylint: disable=too-many-instance-attributes
 # pylint: disable=invalid-name
 
+from neural_network import *
 
 class Bird:
     def __init__(self, canvas, x, y):
@@ -13,11 +14,13 @@ class Bird:
         self.drag = 0.1
         self.lift = 15
         self.fill_color = '#0000FF'
+        self.fitness = 0
         self.gx_proxy = canvas.create_oval(self.x - self.size / 2,
                                            self.y - self.size / 2,
                                            self.x + self.size / 2,
                                            self.y + self.size / 2,
                                            fill=self.fill_color)
+        self.brain = NeuralNetwork(3, 10, 1)
 
     def draw(self):
         self.canvas.coords(self.gx_proxy,
@@ -44,3 +47,8 @@ class Bird:
 
     def hit(self):
         self.fill_color = '#FF0000'
+
+    def guess(self, info):
+        action = self.brain.predict(info).item()
+        if action > 0.5:
+            self.up()

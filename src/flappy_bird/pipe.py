@@ -25,17 +25,26 @@ class Pipe:
                                                        self.canvas.height,
                                                        fill=self.fill_color)
 
+    def get_htop(self):
+        return self.center - self.height / 2
+
+    def get_hbottom(self):
+        return self.center + self.height / 2
+
     def draw(self):
         self.canvas.coords(self.gx_proxy_top,
                            self.x,
                            0,
                            self.x + self.width,
                            self.center - self.height / 2)
+        self.canvas.itemconfig(self.gx_proxy_top, fill=self.fill_color)
         self.canvas.coords(self.gx_proxy_bottom,
                            self.x,
                            self.center + self.height / 2,
                            self.x + self.width,
                            self.canvas.height)
+        self.canvas.itemconfig(self.gx_proxy_bottom, fill=self.fill_color)
+        self.fill_color = '#0000FF'
 
     def update(self):
         self.x -= self.velocity
@@ -45,6 +54,9 @@ class Pipe:
             if (bird.y < self.center - self.height / 2) or (bird.y > self.center + self.height / 2):
                 return True
         return False
+
+    def set_active(self):
+        self.fill_color = '#00FF00'
 
     def off_screen(self):
         return self.x < (-1 * self.width)
