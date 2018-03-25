@@ -8,6 +8,7 @@ from bird import *
 from pipe import *
 
 POPULATION_SIZE = 100
+SPEED = 1
 
 '''
 Flappy Bird
@@ -17,7 +18,7 @@ Flappy Bird
 
 
 class FlappyBirdApp(Canvas):
-    def __init__(self, root, width, height):
+    def __init__(self, root, width, height, speed=1):
         Canvas.__init__(self, root, width=width, height=height)
         self._root_app = root
         self._running = False
@@ -28,6 +29,7 @@ class FlappyBirdApp(Canvas):
         self.pack()
         self.focus_set()
         self.set_framerate(50)
+        self.speed = speed
         self.best_distance = 0
         self.generation_count = 1
         # Init
@@ -60,7 +62,7 @@ class FlappyBirdApp(Canvas):
         # Init next generation
         if evolve:
             self.birds = new_population
-            self.generation_count += 1           
+            self.generation_count += 1
         else:
             self.generation_count = 1
             self.birds = []
@@ -91,17 +93,13 @@ class FlappyBirdApp(Canvas):
                 print('Starting...')
                 self.start()
             return
-        if event.char == 'r':
-            self.init()
-            self.start()
-            print('Restarted...')
-            return
         if event.char == 'l':
             for i, bird in enumerate(self.birds):
-                print('%s\t%s' % (i,bird))
+                print('%s\t%s' % (i, bird))
             return
         if event.char == 'i':
             print('Generation : %s' % self.generation_count)
+            print('Current fitness : %s' % self.frame_count)
             print('Best fitness : %s' % self.best_distance)
             return
 
@@ -111,7 +109,7 @@ class FlappyBirdApp(Canvas):
 
     def update(self):
         # Create new pipe
-        if self.frame_count % 150 == 0:
+        if self.frame_count % int(150/self.speed) == 0:
             self.pipes.append(Pipe(self))
         self.frame_count += 1
         # print('FRAME %s' % self.frame_count)
@@ -122,11 +120,13 @@ class FlappyBirdApp(Canvas):
             pipe.draw()
 
         # Get next pipe info
-        dist, h_top, h_botton = self._get_next_pipe_info()
+        # dist, h_top, h_botton = self._get_next_pipe_info()
+        next_pipe = self._get_next_pipe()
 
         # Update birds
         for bird in self.birds:
-            bird.guess(dist, h_top, h_botton)
+            #bird.guess(dist, h_top, h_botton)
+            bird.guess(next_pipe)
             bird.update(self.frame_count)
             bird.draw()
 
@@ -134,11 +134,13 @@ class FlappyBirdApp(Canvas):
         for pipe in self.pipes:
             for bird in self.birds:
                 if not bird.is_hit():
-                    if(pipe.hits(bird)):
+                    if pipe.hits(bird):
                         bird.hit(self.frame_count)
 
         # Delete off screen pipes
-        [pipe.destroy() for pipe in self.pipes if pipe.off_screen()]
+        for pipe in self.pipes:
+            if pipe.off_screen():
+                pipe.destroy()
         self.pipes = [pipe for pipe in self.pipes if not pipe.off_screen()]
 
         # Calc best fitness
@@ -146,22 +148,19 @@ class FlappyBirdApp(Canvas):
             best = max([bird.fitness for bird in self.birds])
             if best > self.best_distance:
                 self.best_distance = best
-            print('Max fitness / best fitness : %s/%s' % (best, self.best_distance))
+            print('[Gen #%i] Max fitness / best fitness : %s/%s' % (self.generation_count, best, self.best_distance))
             #self.stop()
             self.init(evolve=True)
             #self.start()
 
-    def _get_next_pipe_info(self):
+    def _get_next_pipe(self):
         next_pipe = None
         if self.pipes[0].x + self.pipes[0].width > self._bird_offset:
             next_pipe = self.pipes[0]
         else:
             next_pipe = self.pipes[1]
         next_pipe.set_active()
-        dist = (next_pipe.x + next_pipe.width - self._bird_offset) / self.width
-        h_top = next_pipe.get_htop() / self.height
-        h_botton = next_pipe.get_hbottom() / self.height
-        return dist, h_top, h_botton
+        return next_pipe
 
 
 #
@@ -173,6 +172,6 @@ if __name__ == '__main__':
     print('Python v%s' % platform.python_version())
 
     ROOT = Tk()
-    APP = FlappyBirdApp(ROOT, 400, 400)
+    APP = FlappyBirdApp(ROOT, 400, 400, speed=SPEED)
     #APP.set_framerate(5)
     ROOT.mainloop()

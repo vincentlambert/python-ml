@@ -21,9 +21,9 @@ class Bird:
                                            self.y + self.size / 2,
                                            fill=self.fill_color)
         if (parent_a is not None) and (parent_b is not None):
-            self.brain = NeuralNetwork(4, 3, 1, parent_a.brain, parent_b.brain, mutation_rate=0.01)
+            self.brain = NeuralNetwork(2, 6, 1, parent_a.brain, parent_b.brain, mutation_rate=0.01)
         else:
-            self.brain = NeuralNetwork(4, 5, 1)
+            self.brain = NeuralNetwork(2, 6, 1)
 
     def destroy(self):
         self.canvas.delete(self.gx_proxy)
@@ -52,8 +52,7 @@ class Bird:
                 self.y = 0
                 self.hit(frame_count)
         else:
-            # TODO: Variabiliser la vitesse de défilement
-            self.x -= 1
+            self.x -= self.canvas.speed
 
     def up(self):
         self.velocity -= self.lift
@@ -65,10 +64,11 @@ class Bird:
     def is_hit(self):
         return self.fitness >= 0
 
-    def guess(self, dist, h_top, h_botton):
-        action = self.brain.predict([self.x, dist, h_top, h_botton]).item()
+    def guess(self, pipe):
+        info_vector = [min(pipe.x + pipe.width, self.canvas.width) / self.canvas.width, (pipe.center - self.y) / self.canvas.width]
+        action = self.brain.predict(info_vector).item()
         #action = random.random()
         #print('Prediction : %s' % action)
-        if action > 0.6:
+        if action > 0.5:
             #print('Go up !')
             self.up()

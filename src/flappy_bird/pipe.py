@@ -12,7 +12,6 @@ class Pipe:
         self.height = random.randint(100, 200)
         self.center = random.randint(25 + int(self.height / 2),
                                      self.canvas.height - 25 - int(self.height / 2))
-        self.velocity = 1
         self.fill_color = '#0000FF'
         self.gx_proxy_top = canvas.create_rectangle(self.x,
                                                     0,
@@ -51,7 +50,7 @@ class Pipe:
         self.fill_color = '#0000FF'
 
     def update(self):
-        self.x -= self.velocity
+        self.x -= self.canvas.speed
 
     def hits(self, bird):
         if (bird.x >= self.x) and (bird.x <= self.x + self.width):
