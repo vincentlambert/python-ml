@@ -7,6 +7,7 @@ import platform
 from bird import *
 from pipe import *
 
+POPULATION_SIZE = 100
 
 '''
 Flappy Bird
@@ -27,6 +28,8 @@ class FlappyBirdApp(Canvas):
         self.pack()
         self.focus_set()
         self.set_framerate(50)
+        self.best_distance = 0
+        self.generation_count = 1
         # Init
         self.frame_count = 0
         self.birds = []
@@ -36,25 +39,39 @@ class FlappyBirdApp(Canvas):
     def set_framerate(self, rate):
         self._framerate = int(1000 / rate)
 
-    def init(self):
+    def init(self, evolve=False):
+        new_population = []
+        # Calculate next generation
+        if evolve:
+            birds_fitness = [bird.fitness for bird in self.birds]
+            for _ in range(len(self.birds)):
+                parent_a = random.choices(self.birds, weights=birds_fitness).pop()
+                parent_b = random.choices(self.birds, weights=birds_fitness).pop()
+                new_population.append(Bird(self, self._bird_offset, self.height / 2, parent_a=parent_a, parent_b=parent_b))
+
+        # Destroy obsolete objects
         for bird in self.birds:
             bird.destroy()
         for pipe in self.pipes:
             pipe.destroy()
         self.frame_count = 0
-        self.birds = []
-        self.pipes = []
-        for _ in range(10):
-            self.birds.append(Bird(self, self._bird_offset, self.height / 2))
         self.pipes = []
 
+        # Init next generation
+        if evolve:
+            self.birds = new_population
+            self.generation_count += 1           
+        else:
+            self.generation_count = 1
+            self.birds = []
+            for _ in range(POPULATION_SIZE):
+                self.birds.append(Bird(self, self._bird_offset, self.height / 2))
+
     def start(self):
-        print('Starting...')
         self._running = True
         self.loop()
 
     def stop(self):
-        print('Stopped !')
         self._running = False
 
     def loop(self):
@@ -69,17 +86,25 @@ class FlappyBirdApp(Canvas):
         if event.char == 's':
             if self._running:
                 self.stop()
+                print('Stopped !')
             else:
+                print('Starting...')
                 self.start()
             return
         if event.char == 'r':
             self.init()
             self.start()
+            print('Restarted...')
             return
         if event.char == 'l':
             for i, bird in enumerate(self.birds):
                 print('%s\t%s' % (i,bird))
             return
+        if event.char == 'i':
+            print('Generation : %s' % self.generation_count)
+            print('Best fitness : %s' % self.best_distance)
+            return
+
         # if event.char == ' ':
         #     self.bird.up()
         #     return
@@ -89,7 +114,7 @@ class FlappyBirdApp(Canvas):
         if self.frame_count % 150 == 0:
             self.pipes.append(Pipe(self))
         self.frame_count += 1
-        print('FRAME %s' % self.frame_count)
+        # print('FRAME %s' % self.frame_count)
 
         # Update pipe
         for pipe in self.pipes:
@@ -116,10 +141,15 @@ class FlappyBirdApp(Canvas):
         [pipe.destroy() for pipe in self.pipes if pipe.off_screen()]
         self.pipes = [pipe for pipe in self.pipes if not pipe.off_screen()]
 
+        # Calc best fitness
         if not [bird for bird in self.birds if not bird.is_hit()]:
-            print('Max distance : %s' % max([bird.fitness for bird in self.birds]))
-            self.stop()
-
+            best = max([bird.fitness for bird in self.birds])
+            if best > self.best_distance:
+                self.best_distance = best
+            print('Max fitness / best fitness : %s/%s' % (best, self.best_distance))
+            #self.stop()
+            self.init(evolve=True)
+            #self.start()
 
     def _get_next_pipe_info(self):
         next_pipe = None
@@ -144,5 +174,5 @@ if __name__ == '__main__':
 
     ROOT = Tk()
     APP = FlappyBirdApp(ROOT, 400, 400)
-    APP.set_framerate(5)
+    #APP.set_framerate(5)
     ROOT.mainloop()

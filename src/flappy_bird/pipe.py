@@ -26,7 +26,6 @@ class Pipe:
                                                        fill=self.fill_color)
 
     def destroy(self):
-        print('DESTROY PIPE')
         self.canvas.delete(self.gx_proxy_top)
         self.canvas.delete(self.gx_proxy_bottom)
 

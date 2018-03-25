@@ -4,7 +4,7 @@
 from neural_network import *
 
 class Bird:
-    def __init__(self, canvas, x, y):
+    def __init__(self, canvas, x, y, parent_a=None, parent_b=None):
         self.canvas = canvas
         self.x = x
         self.y = y
@@ -20,7 +20,10 @@ class Bird:
                                            self.x + self.size / 2,
                                            self.y + self.size / 2,
                                            fill=self.fill_color)
-        self.brain = NeuralNetwork(4, 10, 1)
+        if (parent_a is not None) and (parent_b is not None):
+            self.brain = NeuralNetwork(4, 3, 1, parent_a.brain, parent_b.brain, mutation_rate=0.01)
+        else:
+            self.brain = NeuralNetwork(4, 5, 1)
 
     def destroy(self):
         self.canvas.delete(self.gx_proxy)
@@ -64,7 +67,8 @@ class Bird:
 
     def guess(self, dist, h_top, h_botton):
         action = self.brain.predict([self.x, dist, h_top, h_botton]).item()
-        # TODO: Activate NN here !
-        # if action > 0.5:
-        if random.random() > 0.5:
+        #action = random.random()
+        #print('Prediction : %s' % action)
+        if action > 0.6:
+            #print('Go up !')
             self.up()
