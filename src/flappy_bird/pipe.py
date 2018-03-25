@@ -25,6 +25,11 @@ class Pipe:
                                                        self.canvas.height,
                                                        fill=self.fill_color)
 
+    def destroy(self):
+        print('DESTROY PIPE')
+        self.canvas.delete(self.gx_proxy_top)
+        self.canvas.delete(self.gx_proxy_bottom)
+
     def get_htop(self):
         return self.center - self.height / 2
 
