@@ -24,13 +24,13 @@ class NeuralNetwork:
             self.hidden_nodes = hidden_nodes
             self.output_nodes = output_nodes
             self.weights_ih = np.matrix(np.random.random(
-                (self.hidden_nodes, self.input_nodes))) / self.input_nodes
+                (self.hidden_nodes, self.input_nodes))) * 2 - 1
             self.weights_ho = np.matrix(np.random.random(
-                (self.output_nodes, self.hidden_nodes))) / self.hidden_nodes
+                (self.output_nodes, self.hidden_nodes))) * 2 - 1
             self.bias_h = np.matrix(np.random.random(
-                (self.hidden_nodes, 1))) / self.input_nodes
+                (self.hidden_nodes, 1))) * 2 - 1
             self.bias_o = np.matrix(np.random.random(
-                (self.output_nodes, 1))) / self.hidden_nodes
+                (self.output_nodes, 1))) * 2 - 1
 
     def __str__(self):
         return 'NeuralNetwork[%s, %s, %s] :\n  Hidden : \n%s\n  Ouput : \n%s' % (self.input_nodes, self.hidden_nodes, self.output_nodes, self.weights_ih, self.weights_ho)
@@ -217,15 +217,15 @@ if __name__ == '__main__':
     print("*****")
 
     NN_A = NeuralNetwork(3, 5, 2)
-    NN_A.set_to(0)
-    # print(NN_A)
+    # NN_A.set_to(0)
+    print(NN_A)
     # NN_B = NN_A.clone()
     # NN_A.mutate(0.5)
     # print(NN_B)
     # print(NN_A)
 
-    NN_B = NeuralNetwork(3, 5, 2)
-    NN_B.set_to(1)
+    # NN_B = NeuralNetwork(3, 5, 2)
+    # # NN_B.set_to(1)
     # NN_B.set_dna(NN_A.get_dna())
 
     # dna_a = NN_A.get_dna()
@@ -241,5 +241,5 @@ if __name__ == '__main__':
 
     # print(NN_A)
     # print('----------')
-    NN_C = NeuralNetwork(parent_a=NN_A, parent_b=NN_B, mutation_rate=0.01)
-    print(NN_C)
+    # NN_C = NeuralNetwork(parent_a=NN_A, parent_b=NN_B, mutation_rate=0.01)
+    # print(NN_C)
