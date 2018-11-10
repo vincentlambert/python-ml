@@ -37,6 +37,11 @@ Running the neural network doodle classifier using Google Quickdraw dataset.
 _https://quickdraw.withgoogle.com/_<br>
 _https://github.com/googlecreativelab/quickdraw-dataset_<br>
 _https://console.cloud.google.com/storage/browser/quickdraw_dataset_
+
 ## Genetic Algorithm
 
 > python src/genetic_algorithm.py
+
+## Maze solving
+
+__WORK IN PROGRESS__
