@@ -88,7 +88,7 @@ $ python -m rasa_nlu.server --path data/models
 
 To query the server:
 ```shell
-$ curl -X POST localhost:5000/parse -d '{"query": "Hello", "project": "test_en"}'
+$ curl -X POST localhost:5000/parse -d '{"query": "Hello", "project": "test_en"'
 ```
 
 
